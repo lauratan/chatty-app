@@ -22,6 +22,8 @@ export default class App extends Component {
         }
       ]
     };
+
+    this.onEnter = this.onEnter.bind(this);
   }
 
   componentDidMount() {
@@ -35,8 +37,21 @@ export default class App extends Component {
     }, 3000);
   }
   
+  // onEnter(event) {
+  //   const newMessage = [{username: this.state.currentUser.name , content: event.target.value}];
+  //   this.setState((prevState) => {
+  //     return 
+  //   })
+  // }
 
-
+  onEnter(event) {
+    const newMessage = [{username: this.state.currentUser.name , content: event.target.value}];
+    const messages = this.state.messages.concat(newMessage)
+    if (event.key === 'Enter'){
+      this.setState({messages: messages} , event.target.value='')
+    }
+  }
+ 
   render() {
     return (
       <div>
@@ -44,7 +59,9 @@ export default class App extends Component {
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
         <MessageList messages = { this.state.messages }/>
-        <ChatBar currentUser = { this.state.currentUser }/>
+        <ChatBar 
+        currentUser = { this.state.currentUser } 
+        onEnter = { this.onEnter }/>
       </div>
     );
   }
