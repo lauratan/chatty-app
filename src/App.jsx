@@ -35,7 +35,7 @@ export default class App extends Component {
     //   // Calling setState will trigger a call to render() in App and all child components.
     //   this.setState({messages: messages})
     // }, 3000);
-    this.socket = new WebSocket('ws:localhost:3001');
+    this.socket = new WebSocket('ws://localhost:3001'); //${window.location.host}
     console.log('Connected to server')
 
   }
@@ -56,10 +56,12 @@ export default class App extends Component {
   // }
 
   onEnter(event) {
-    const newMessage = [{id: this.generateRandomString(), username: this.state.currentUser.name , content: event.target.value}];
-    const messages = this.state.messages.concat(newMessage)
+    const newMessage = {id: this.generateRandomString(), username: this.state.currentUser.name , content: event.target.value};
+    // const messages = this.state.messages.concat(newMessage)
+    // const newMessage = {content: event.target.value}
     if (event.key === 'Enter'){
-      this.setState({messages: messages} , event.target.value='')
+      this.socket.send(JSON.stringify(newMessage));
+      // this.setState({messages: messages} , event.target.value='')
     }
   }
  
