@@ -11,16 +11,21 @@ export default class App extends Component {
       currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
         {
-          id: 'hyvdw',
-          username: 'Bob',
-          content: 'Has anyone seen my marbles?',
-        },
-        {
-          id: '1kdho',
-          username: 'Anonymous',
-          content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
+          id: '',
+          username: '',
+          content: ''
         }
       ]
+        // {
+        //   id: 'hyvdw',
+        //   username: 'Bob',
+        //   content: 'Has anyone seen my marbles?',
+        // },
+        // {
+        //   id: '1kdho',
+        //   username: 'Anonymous',
+        //   content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
+        // }
     };
 
     this.onEnter = this.onEnter.bind(this);
@@ -35,33 +40,23 @@ export default class App extends Component {
     //   // Calling setState will trigger a call to render() in App and all child components.
     //   this.setState({messages: messages})
     // }, 3000);
-    this.socket = new WebSocket('ws://localhost:3001'); //${window.location.host}
-    console.log('Connected to server')
+    this.socket = new WebSocket(`ws://localhost:3001`); //${window.location.host}
+    // console.log('Connected to server', window.location.host)
 
+    this.socket.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      const messages = this.state.messages.concat(msg);
+      this.setState({messages: messages})
+      // console.log(JSON.parse(event.data))
+    }
   }
-  
-  generateRandomString() {
-    let randomString = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 6; i++)
-      randomString += possible.charAt(Math.floor(Math.random() * possible.length));
-    
-    return randomString;
-  }
-  // onEnter(event) {
-  //   const newMessage = [{username: this.state.currentUser.name , content: event.target.value}];
-  //   this.setState((prevState) => {
-  //     return 
-  //   })
-  // }
 
   onEnter(event) {
-    const newMessage = {id: this.generateRandomString(), username: this.state.currentUser.name , content: event.target.value};
+    const newMessage = {username: this.state.currentUser.name , content: event.target.value};
     // const messages = this.state.messages.concat(newMessage)
     // const newMessage = {content: event.target.value}
     if (event.key === 'Enter'){
-      this.socket.send(JSON.stringify(newMessage));
-      // this.setState({messages: messages} , event.target.value='')
+      this.socket.send(JSON.stringify(newMessage), event.target.value='');
     }
   }
  
