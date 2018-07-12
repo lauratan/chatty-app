@@ -8,27 +8,18 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: ''}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
-        {
-          id: '',
-          username: '',
-          content: ''
-        }
-      ]
         // {
-        //   id: 'hyvdw',
-        //   username: 'Bob',
-        //   content: 'Has anyone seen my marbles?',
-        // },
-        // {
-        //   id: '1kdho',
-        //   username: 'Anonymous',
-        //   content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
+        //   id: '',
+        //   username: '',
+        //   content: ''
         // }
+      ]
     };
 
     this.onEnter = this.onEnter.bind(this);
+    this.onEnterUsername = this.onEnterUsername.bind(this);
   }
 
   componentDidMount() {
@@ -40,24 +31,28 @@ export default class App extends Component {
     //   // Calling setState will trigger a call to render() in App and all child components.
     //   this.setState({messages: messages})
     // }, 3000);
-    this.socket = new WebSocket(`ws://localhost:3001`); //${window.location.host}
+    this.socket = new WebSocket(`ws://${window.location.hostname}:3001`); //${window.location.host}
     // console.log('Connected to server', window.location.host)
 
     this.socket.onmessage = (event) => {
       const msg = JSON.parse(event.data);
       const messages = this.state.messages.concat(msg);
       this.setState({messages: messages})
-      // console.log(JSON.parse(event.data))
+      
     }
   }
 
-  onEnter(event) {
-    const newMessage = {username: this.state.currentUser.name , content: event.target.value};
-    // const messages = this.state.messages.concat(newMessage)
-    // const newMessage = {content: event.target.value}
-    if (event.key === 'Enter'){
-      this.socket.send(JSON.stringify(newMessage), event.target.value='');
-    }
+  onEnter(content) {
+    console.log(content);
+    const newMessage = { username: this.state.currentUser.name, content};
+
+   
+    this.socket.send(JSON.stringify(newMessage));
+    
+  }
+
+  onEnterUsername(newUsername){ 
+    this.setState({currentUser: newUsername});
   }
  
   render() {
@@ -68,8 +63,10 @@ export default class App extends Component {
       </nav>
         <MessageList messages = { this.state.messages }/>
         <ChatBar 
-        currentUser = { this.state.currentUser } 
-        onEnter = { this.onEnter }/>
+          onEnter = { this.onEnter }
+          username = { this.state.currentUser.name }
+          onEnterUsername = { this.onEnterUsername }
+        />
       </div>
     );
   }

@@ -36,6 +36,7 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (data) => {
     let message = JSON.parse(data);
+    console.log(message);
     message.id = uuidv1(); 
 
     // // Broadcast to every client except me 
@@ -46,7 +47,7 @@ wss.on('connection', (ws) => {
     // });
 
     wss.broadcast(JSON.stringify(message));
-    // console.log(`User ${message.username} says ${message.content} and ${message.id}`);
+    console.log(`User ${message.username} says ${message.content} and ${message.id}`);
   })
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));
