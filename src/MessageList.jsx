@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import Message from './Message.jsx'
+import Message from './Message.jsx';
+import autoscroll from 'autoscroll-react';
 
-export default class MessageList extends Component {
+// const styles = {
+//     overflowY: 'scroll',
+//     height: '800px'
+// };
+
+class MessageList extends Component {
     render(){
         // return <Message/>
         let messages = this.props.messages.map(message => {
@@ -12,9 +18,11 @@ export default class MessageList extends Component {
             />
         })
         return (
-            <section>
+            <main className="messages">
                 {messages}
-            </section>
+            </main>
         );
     }
 }
+
+export default autoscroll(MessageList)
