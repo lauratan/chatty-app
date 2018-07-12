@@ -70,7 +70,7 @@ export default class App extends Component {
 
   //Gets entered username from ChatBar and change the state of current user 
   onEnterUsername(newUsername){ 
-    if (this.state.currentUser.name === '' || this.state.currentUser.name === newUsername){
+    if (this.state.currentUser.name === '' || this.state.currentUser.name === newUsername.name){
       this.setState({currentUser: newUsername});
     }
    
