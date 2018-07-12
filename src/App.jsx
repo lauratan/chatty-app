@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
+import NavBar from './NavBar.jsx';
 
 export default class App extends Component {
   constructor(props){
@@ -13,11 +14,12 @@ export default class App extends Component {
         // {
         //   id: '',
         //   username: '',
-        //   content: ''
-        //
+        //   content: '',
+        //   notification: ''
         // }
       ],
-      notification: ''
+      notification: '',
+      usersOnline: ''
     };
 
     this.onEnter = this.onEnter.bind(this);
@@ -47,6 +49,9 @@ export default class App extends Component {
         //Handle incomingMessage type: display the message in message 
         const messages = this.state.messages.concat(msg);
         this.setState({messages})
+        case 'incomingNumber':
+        console.log(msg.content)
+        this.setState({usersOnline: msg.content})
         break;
       }
     }
@@ -65,9 +70,10 @@ export default class App extends Component {
 
   //Gets entered username from ChatBar and change the state of current user 
   onEnterUsername(newUsername){ 
-    if (this.state.currentUser.name === ''){
+    if (this.state.currentUser.name === '' || this.state.currentUser.name === newUsername){
       this.setState({currentUser: newUsername});
     }
+   
     else {
       const notification = {
         type: 'postNotification',
@@ -81,9 +87,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-      <nav className="navbar">
-        <a href="/" className="navbar-brand">Chatty</a>
-      </nav>
+        <NavBar  count = { this.state.usersOnline }/>
         <MessageList messages = { this.state.messages } notification = { this.state.notification } />
         <ChatBar 
           onEnter = { this.onEnter }
