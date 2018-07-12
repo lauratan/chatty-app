@@ -14,8 +14,10 @@ export default class App extends Component {
         //   id: '',
         //   username: '',
         //   content: ''
+        //
         // }
-      ]
+      ],
+      notification: ''
     };
 
     this.onEnter = this.onEnter.bind(this);
@@ -32,27 +34,48 @@ export default class App extends Component {
     //   this.setState({messages: messages})
     // }, 3000);
     this.socket = new WebSocket(`ws://${window.location.hostname}:3001`); //${window.location.host}
-    // console.log('Connected to server', window.location.host)
 
     this.socket.onmessage = (event) => {
       const msg = JSON.parse(event.data);
-      const messages = this.state.messages.concat(msg);
-      this.setState({messages: messages})
-      
+      console.log(msg.type);
+      switch(msg.type){
+        case 'incomingNotification':
+        //Handle incomingNotifcation type: display Notication that user changed name in Message.jsx
+        this.setState({notification: msg.content})
+        break;
+        case 'incomingMessage':
+        //Handle incomingMessage type: display the message in message 
+        const messages = this.state.messages.concat(msg);
+        this.setState({messages})
+        break;
+      }
     }
   }
 
-  onEnter(content) {
-    console.log(content);
-    const newMessage = { username: this.state.currentUser.name, content};
 
-   
+  //Gets content from ChatBar and sends it to socket server
+  onEnter(content) {
+    const newMessage = {  
+      type: 'postMessage',
+      username: this.state.currentUser.name, 
+      content
+    };
     this.socket.send(JSON.stringify(newMessage));
-    
   }
 
+  //Gets entered username from ChatBar and change the state of current user 
   onEnterUsername(newUsername){ 
-    this.setState({currentUser: newUsername});
+    if (this.state.currentUser.name === ''){
+      this.setState({currentUser: newUsername});
+    }
+    else {
+      const notification = {
+        type: 'postNotification',
+        content: `${this.state.currentUser.name} has changed their name to ${newUsername.name}`
+      }
+      this.setState({currentUser: newUsername});
+      this.socket.send(JSON.stringify(notification));
+    }
   }
  
   render() {
@@ -61,7 +84,7 @@ export default class App extends Component {
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
-        <MessageList messages = { this.state.messages }/>
+        <MessageList messages = { this.state.messages } notification = { this.state.notification } />
         <ChatBar 
           onEnter = { this.onEnter }
           username = { this.state.currentUser.name }

@@ -2,14 +2,8 @@ import React, {Component} from 'react';
 import Message from './Message.jsx';
 import autoscroll from 'autoscroll-react';
 
-// const styles = {
-//     overflowY: 'scroll',
-//     height: '800px'
-// };
-
 class MessageList extends Component {
     render(){
-        // return <Message/>
         let messages = this.props.messages.map(message => {
             return <Message 
             key={message.id}
@@ -20,6 +14,7 @@ class MessageList extends Component {
         return (
             <main className="messages">
                 {messages}
+                {this.props.notification}
             </main>
         );
     }

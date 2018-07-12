@@ -8,6 +8,7 @@ export default class ChatBar extends Component {
         this.onUsernameUpdate = this.onUsernameUpdate.bind(this);
     }
 
+    //Retrieve message content 
     onKeyPress(event) {
         if (event.key === 'Enter'){
            const content = event.target.value;
@@ -16,7 +17,7 @@ export default class ChatBar extends Component {
         }
     }
 
-
+    //Retrieve entered username 
     onUsernameUpdate(event) {
         const newUsername = (event.target.value.length === 0) ? {name: 'Anonymous' } : {name: event.target.value};
         this.props.onEnterUsername(newUsername);

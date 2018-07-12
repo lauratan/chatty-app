@@ -35,19 +35,27 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
 
   ws.on('message', (data) => {
-    let message = JSON.parse(data);
-    console.log(message);
-    message.id = uuidv1(); 
+    let incomingData = JSON.parse(data);
+    //check postNotif or postMessage
+    if (incomingData.type === 'postMessage') {
+      const message = {
+        type: 'incomingMessage',
+        id: incomingData.id = uuidv1(),
+        username: incomingData.username,
+        content: incomingData.content
+      }
+      wss.broadcast(JSON.stringify(message));
+    }
+    //If it is postNotification, send incomingNotification back to App to be displayed 
+    if (incomingData.type === 'postNotification') {
+      const message = {
+        type: 'incomingNotification',
+        content: incomingData.content
+      }
+      wss.broadcast(JSON.stringify(message));
+    }
 
-    // // Broadcast to every client except me 
-    // wss.clients.forEach( (client) =>  {
-    //     if (client.readyState === SocketServer.OPEN) {
-    //       client.send(JSON.stringify(message));
-    //     }  
-    // });
-
-    wss.broadcast(JSON.stringify(message));
-    console.log(`User ${message.username} says ${message.content} and ${message.id}`);
+    // console.log(`User ${message.username} says ${message.content} and ${message.id}`);
   })
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));
