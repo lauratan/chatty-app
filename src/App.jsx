@@ -41,18 +41,20 @@ export default class App extends Component {
       const msg = JSON.parse(event.data);
       switch(msg.type){
         case 'incomingNotification': {
+
         //Handle incomingNotifcation type: display Notication that user changed name in Message.jsx
-        console.log(msg);
         const messages = this.state.messages.concat(msg);
         this.setState({messages})
         break;
         }
-        case 'incomingMessage':{
+
         //Handle incomingMessage type: display the message in message 
+        case 'incomingMessage':{
         const messages = this.state.messages.concat(msg);
         this.setState({messages})
         break;
         }
+
         //Handle incomingNumber of online users
         case 'incomingNumber': {
         this.setState({usersOnline: msg.content})
@@ -90,7 +92,6 @@ export default class App extends Component {
   }
  
   render() {
-    // console.log(this.state.messages)
     return (
       <div>
         <NavBar  count = { this.state.usersOnline }/>
