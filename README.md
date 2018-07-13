@@ -5,7 +5,7 @@ A simple ReactJS real-time chat app built from a minimal react boilerplate to ga
 
 ## Final Product 
 
-![alt text]()
+![alt text](https://github.com/lauratan/chatty-app/blob/master/docs/chatty.gif)
 
 ## Getting Started 
 
