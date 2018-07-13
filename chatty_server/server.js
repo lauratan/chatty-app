@@ -58,9 +58,13 @@ wss.on('connection', (ws) => {
     }
     //If it is postNotification, send incomingNotification back to App to be displayed 
     if (incomingData.type === 'postNotification') {
+      console.log(incomingData.content);
       const message = {
         type: 'incomingNotification',
-        content: incomingData.content
+        id: incomingData.id = uuidv1(),
+        username: '',
+        content: '',
+        notification: incomingData.content
       }
       wss.broadcast(JSON.stringify(message));
     }
@@ -76,5 +80,5 @@ wss.on('connection', (ws) => {
   }
   wss.broadcast(JSON.stringify(onlineUser));
   })
-  
+
 });

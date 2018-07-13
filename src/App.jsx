@@ -18,7 +18,7 @@ export default class App extends Component {
         //   notification: ''
         // }
       ],
-      notification: '',
+      // notification: '',
       usersOnline: ''
     };
 
@@ -39,20 +39,23 @@ export default class App extends Component {
 
     this.socket.onmessage = (event) => {
       const msg = JSON.parse(event.data);
-      console.log(msg.type);
       switch(msg.type){
-        case 'incomingNotification':
+        case 'incomingNotification': {
         //Handle incomingNotifcation type: display Notication that user changed name in Message.jsx
-        this.setState({notification: msg.content})
+        const messages = this.state.messages.concat(msg);
+        this.setState({messages})
         break;
-        case 'incomingMessage':
+        }
+        case 'incomingMessage':{
         //Handle incomingMessage type: display the message in message 
         const messages = this.state.messages.concat(msg);
         this.setState({messages})
-        case 'incomingNumber':
-        console.log(msg.content)
+        break;
+        }
+        case 'incomingNumber': {
         this.setState({usersOnline: msg.content})
         break;
+        }
       }
     }
   }
@@ -88,7 +91,7 @@ export default class App extends Component {
     return (
       <div>
         <NavBar  count = { this.state.usersOnline }/>
-        <MessageList messages = { this.state.messages } notification = { this.state.notification } />
+        <MessageList messages = { this.state.messages } />
         <ChatBar 
           onEnter = { this.onEnter }
           username = { this.state.currentUser.name }

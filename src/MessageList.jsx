@@ -7,14 +7,14 @@ class MessageList extends Component {
         let messages = this.props.messages.map(message => {
             return <Message 
             key={message.id}
-            user={message.username}
+            username={message.username}
             content={message.content}
+            notification={message.notification}
             />
         })
         return (
             <main className="messages">
                 {messages}
-                {this.props.notification}
             </main>
         );
     }
