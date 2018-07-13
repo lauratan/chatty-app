@@ -16,9 +16,9 @@ export default class App extends Component {
         //   username: '',
         //   content: '',
         //   notification: ''
+        //   colour: '{color: ''}'
         // }
       ],
-      // notification: '',
       usersOnline: ''
     };
 
@@ -42,6 +42,7 @@ export default class App extends Component {
       switch(msg.type){
         case 'incomingNotification': {
         //Handle incomingNotifcation type: display Notication that user changed name in Message.jsx
+        console.log(msg);
         const messages = this.state.messages.concat(msg);
         this.setState({messages})
         break;
@@ -52,6 +53,7 @@ export default class App extends Component {
         this.setState({messages})
         break;
         }
+        //Handle incomingNumber of online users
         case 'incomingNumber': {
         this.setState({usersOnline: msg.content})
         break;
@@ -88,6 +90,7 @@ export default class App extends Component {
   }
  
   render() {
+    // console.log(this.state.messages)
     return (
       <div>
         <NavBar  count = { this.state.usersOnline }/>

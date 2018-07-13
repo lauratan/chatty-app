@@ -10,6 +10,7 @@ class MessageList extends Component {
             username={message.username}
             content={message.content}
             notification={message.notification}
+            // colour={message.colour}
             />
         })
         return (

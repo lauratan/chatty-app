@@ -35,7 +35,7 @@ wss.broadcast = (data) => {
 wss.on('connection', (ws) => {
 
   console.log('client connected', wss.options.server._connections)
-  
+
 
   let onlineUser = {
     type: 'incomingNumber',
@@ -43,6 +43,13 @@ wss.on('connection', (ws) => {
   }
   console.log(onlineUser);
   wss.broadcast(JSON.stringify(onlineUser));
+
+  // const colours = ['blue']
+  // function getColour(){
+  //   let colour = {color: colours[0]};
+  //   console.log(colour);
+  //   return  colour;
+  // }
 
   ws.on('message', (data) => {
     let incomingData = JSON.parse(data);
@@ -65,7 +72,9 @@ wss.on('connection', (ws) => {
         username: '',
         content: '',
         notification: incomingData.content
+        // colour: getColour() //{color:''}
       }
+      console.log(message);
       wss.broadcast(JSON.stringify(message));
     }
 
