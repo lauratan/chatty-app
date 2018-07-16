@@ -27,39 +27,37 @@ wss.broadcast = (data) => {
   });
 };
 
+//Colours for users
+const colors = ['purple', 'blue', 'green', 'red'];
+
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
-
 wss.on('connection', (ws) => {
 
   console.log('client connected', wss.options.server._connections)
+  
+  let color =colors[Math.floor(Math.random()*colors.length)];
 
-
+  //Counts the number of clients connected to the server
   let onlineUser = {
     type: 'incomingNumber',
     content: `${wss.options.server._connections} user(s) online`
   }
   wss.broadcast(JSON.stringify(onlineUser));
 
-  // const colours = ['blue']
-  // function getColour(){
-  //   let colour = {color: colours[0]};
-  //   console.log(colour);
-  //   return  colour;
-  // }
-
   ws.on('message', (data) => {
     let incomingData = JSON.parse(data);
-
+    console.log(color);
     //Check postNotification or postMessage
     if (incomingData.type === 'postMessage') {
       const message = {
         type: 'incomingMessage',
         id: incomingData.id = uuidv1(),
         username: incomingData.username,
-        content: incomingData.content
+        content: incomingData.content,
+        color: color
       }
       wss.broadcast(JSON.stringify(message));
     }
@@ -71,7 +69,8 @@ wss.on('connection', (ws) => {
         id: incomingData.id = uuidv1(),
         username: '',
         content: '',
-        notification: incomingData.content
+        notification: incomingData.content,
+        color: ''
         // colour: getColour() //{color:''}
       }
       wss.broadcast(JSON.stringify(message));

@@ -15,8 +15,8 @@ export default class App extends Component {
         //   id: '',
         //   username: '',
         //   content: '',
-        //   notification: ''
-        //   colour: '{color: ''}'
+        //   notification: '',
+        //   color: 'red'
         // }
       ],
       usersOnline: ''
@@ -39,6 +39,8 @@ export default class App extends Component {
 
     this.socket.onmessage = (event) => {
       const msg = JSON.parse(event.data);
+      console.log(msg);
+
       switch(msg.type){
         case 'incomingNotification': {
 
